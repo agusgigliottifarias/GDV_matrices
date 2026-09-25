@@ -1,0 +1,334 @@
+[gd_scene format=3 uid="uid://d1m4n2v8j3p6c"]
+
+[ext_resource type="Script" uid="uid://xpnqu8csckvu" path="res://scripts/menu.gd" id="1_menu"]
+[ext_resource type="Texture2D" uid="uid://c57o55v7thppm" path="res://assets/Fondo.jpeg" id="2_vjb58"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card_menu"]
+bg_color = Color(0.09, 0.11, 0.17, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.16, 0.52, 1, 0.8)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_play_btn"]
+bg_color = Color(0.08, 0.65, 0.32, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.25, 0.9, 0.45, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_play_btn_hover"]
+bg_color = Color(0.1, 0.78, 0.38, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.4, 1, 0.6, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_secondary_btn"]
+bg_color = Color(0.14, 0.18, 0.28, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.28, 0.42, 0.65, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_secondary_btn_hover"]
+bg_color = Color(0.18, 0.25, 0.38, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.4, 0.6, 0.9, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_popup"]
+bg_color = Color(0.09, 0.11, 0.17, 0.99)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.16, 0.48, 1, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_input_p1"]
+bg_color = Color(0.06, 0.12, 0.22, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.16, 0.48, 1, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_input_p2"]
+bg_color = Color(0.22, 0.12, 0.06, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.43, 0, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="Menu" type="Control" unique_id=1295785978]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_menu")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=8891925]
+
+[node name="Background" type="Sprite2D" parent="CanvasLayer" unique_id=1930615484]
+position = Vector2(639, 359.5)
+scale = Vector2(0.48343372, 0.46364796)
+texture = ExtResource("2_vjb58")
+
+[node name="CenterContainer" type="CenterContainer" parent="CanvasLayer" unique_id=552148640]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MainCard" type="PanelContainer" parent="CanvasLayer/CenterContainer" unique_id=1445001279]
+custom_minimum_size = Vector2(440, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_card_menu")
+
+[node name="Margin" type="MarginContainer" parent="CanvasLayer/CenterContainer/MainCard" unique_id=1376247210]
+layout_mode = 2
+theme_override_constants/margin_left = 35
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 35
+theme_override_constants/margin_bottom = 30
+
+[node name="MainVBox" type="VBoxContainer" parent="CanvasLayer/CenterContainer/MainCard/Margin" unique_id=902303409]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 22
+
+[node name="TitleLabel" type="Label" parent="CanvasLayer/CenterContainer/MainCard/Margin/MainVBox" unique_id=400802208]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.18, 0.78, 1, 1)
+theme_override_font_sizes/font_size = 40
+text = "GDV MATRICES"
+horizontal_alignment = 1
+
+[node name="SubtitleLabel" type="Label" parent="CanvasLayer/CenterContainer/MainCard/Margin/MainVBox" unique_id=1237168394]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.78, 0.88, 1)
+theme_override_font_sizes/font_size = 17
+text = "Desafío Matemático - 3 en Raya"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="CanvasLayer/CenterContainer/MainCard/Margin/MainVBox" unique_id=1721812036]
+layout_mode = 2
+
+[node name="PlayButton" type="Button" parent="CanvasLayer/CenterContainer/MainCard/Margin/MainVBox" unique_id=1334188580]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 58)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 23
+theme_override_styles/normal = SubResource("StyleBoxFlat_play_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_play_btn_hover")
+text = "JUGAR"
+
+[node name="RulesButton" type="Button" parent="CanvasLayer/CenterContainer/MainCard/Margin/MainVBox" unique_id=1801484707]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+theme_override_font_sizes/font_size = 19
+theme_override_styles/normal = SubResource("StyleBoxFlat_secondary_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_secondary_btn_hover")
+text = "REGLAS DEL JUEGO"
+
+[node name="ExitButton" type="Button" parent="CanvasLayer/CenterContainer/MainCard/Margin/MainVBox" unique_id=763827928]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+theme_override_font_sizes/font_size = 19
+theme_override_styles/normal = SubResource("StyleBoxFlat_secondary_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_secondary_btn_hover")
+text = "SALIR"
+
+[node name="NamesPopup" type="PanelContainer" parent="CanvasLayer" unique_id=13557434]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -240.0
+offset_top = -210.0
+offset_right = 240.0
+offset_bottom = 210.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_popup")
+
+[node name="Margin" type="MarginContainer" parent="CanvasLayer/NamesPopup" unique_id=803501035]
+layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 25
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 25
+
+[node name="VBox" type="VBoxContainer" parent="CanvasLayer/NamesPopup/Margin" unique_id=1579657792]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="PopupTitle" type="Label" parent="CanvasLayer/NamesPopup/Margin/VBox" unique_id=1889989943]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 22
+text = "REGISTRO DE JUGADORES"
+horizontal_alignment = 1
+
+[node name="PopupDesc" type="Label" parent="CanvasLayer/NamesPopup/Margin/VBox" unique_id=330327421]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.75, 0.85, 1)
+theme_override_font_sizes/font_size = 13
+text = "Ingresen los nombres para el duelo matemático:"
+horizontal_alignment = 1
+
+[node name="P1Label" type="Label" parent="CanvasLayer/NamesPopup/Margin/VBox" unique_id=136417586]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.29, 0.65, 1, 1)
+theme_override_font_sizes/font_size = 15
+text = "🔹 Jugador 1 (Azul - X):"
+
+[node name="P1NameInput" type="LineEdit" parent="CanvasLayer/NamesPopup/Margin/VBox" unique_id=1020983749]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_input_p1")
+text = "Jugador 1"
+placeholder_text = "Escribe tu nombre..."
+alignment = 1
+
+[node name="P2Label" type="Label" parent="CanvasLayer/NamesPopup/Margin/VBox" unique_id=1315117329]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.55, 0.2, 1)
+theme_override_font_sizes/font_size = 15
+text = "🔸 Jugador 2 (Naranja - O):"
+
+[node name="P2NameInput" type="LineEdit" parent="CanvasLayer/NamesPopup/Margin/VBox" unique_id=1459106790]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_input_p2")
+text = "Jugador 2"
+placeholder_text = "Escribe tu nombre..."
+alignment = 1
+
+[node name="ButtonsHBox" type="HBoxContainer" parent="CanvasLayer/NamesPopup/Margin/VBox" unique_id=1603225605]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="CancelNamesButton" type="Button" parent="CanvasLayer/NamesPopup/Margin/VBox/ButtonsHBox" unique_id=235159009]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_secondary_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_secondary_btn_hover")
+text = "Cancelar"
+
+[node name="StartGameButton" type="Button" parent="CanvasLayer/NamesPopup/Margin/VBox/ButtonsHBox" unique_id=1980162366]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 17
+theme_override_styles/normal = SubResource("StyleBoxFlat_play_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_play_btn_hover")
+text = "¡EMPEZAR!"
+
+[node name="RulesPopup" type="PanelContainer" parent="CanvasLayer" unique_id=319922540]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -280.0
+offset_top = -210.0
+offset_right = 280.0
+offset_bottom = 210.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_popup")
+
+[node name="Margin" type="MarginContainer" parent="CanvasLayer/RulesPopup" unique_id=1830647610]
+layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 25
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 25
+
+[node name="VBox" type="VBoxContainer" parent="CanvasLayer/RulesPopup/Margin" unique_id=1707877130]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="RulesTitle" type="Label" parent="CanvasLayer/RulesPopup/Margin/VBox" unique_id=487318662]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 22
+text = "📜 REGLAS DEL JUEGO"
+horizontal_alignment = 1
+
+[node name="RulesText" type="RichTextLabel" parent="CanvasLayer/RulesPopup/Margin/VBox" unique_id=541810920]
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+text = " 1. LOS DADOS: Al iniciar tu turno se tiran automáticamente 3 dados  con números del 1 al 8
+2. ARMA TU CUENTA: Combina los 3 dados usando los signos + - * / ( ) para calcular un número libre del tablero (del 1 al 50). Ejemplo: Si sacas 3, 5 y 8, puedes armar: ( 8 - 5 ) * 3 = 9
+3. CONQUISTA TU CASILLA: Si el resultado es un número entero exacto y está libre, presiona Confirmar para marcarlo con tu ficha (Azul X o Naranja O).
+4. ¡GANA LA PARTIDA!: Sé el primero en alinear 3 casillas seguidas (horizontal, vertical o diagonal) para ganar."
+
+[node name="CloseRulesButton" type="Button" parent="CanvasLayer/RulesPopup/Margin/VBox" unique_id=1005178974]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 45)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_secondary_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_secondary_btn_hover")
+text = "Entendido"
