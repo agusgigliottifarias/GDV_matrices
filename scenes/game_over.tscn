@@ -105,7 +105,7 @@ custom_minimum_size = Vector2(0, 52)
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_restart")
-text = "🔄 REINICIAR PARTIDA"
+text = "REINICIAR PARTIDA"
 
 [node name="MenuButton" type="Button" parent="CanvasLayer/CenterContainer/CardPanel/Margin/MainVBox/ButtonsVBox" unique_id=798773422]
 unique_name_in_owner = true
@@ -113,4 +113,4 @@ custom_minimum_size = Vector2(0, 52)
 layout_mode = 2
 theme_override_font_sizes/font_size = 19
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_menu")
-text = "🏠 MENÚ PRINCIPAL"
+text = "MENÚ PRINCIPAL"

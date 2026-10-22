@@ -186,7 +186,6 @@ text = "SALIR"
 
 [node name="NamesPopup" type="PanelContainer" parent="CanvasLayer" unique_id=13557434]
 unique_name_in_owner = true
-visible = false
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -229,7 +228,7 @@ horizontal_alignment = 1
 layout_mode = 2
 theme_override_colors/font_color = Color(0.29, 0.65, 1, 1)
 theme_override_font_sizes/font_size = 15
-text = "🔹 Jugador 1 (Azul - X):"
+text = "Jugador 1 (Azul - X):"
 
 [node name="P1NameInput" type="LineEdit" parent="CanvasLayer/NamesPopup/Margin/VBox" unique_id=1020983749]
 unique_name_in_owner = true
@@ -245,7 +244,7 @@ alignment = 1
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.55, 0.2, 1)
 theme_override_font_sizes/font_size = 15
-text = "🔸 Jugador 2 (Naranja - O):"
+text = "Jugador 2 (Naranja - O):"
 
 [node name="P2NameInput" type="LineEdit" parent="CanvasLayer/NamesPopup/Margin/VBox" unique_id=1459106790]
 unique_name_in_owner = true
