@@ -35,7 +35,7 @@ func _setup_music_player() -> void:
 	add_child(music_player)
 
 func _auto_load_bgm() -> void:
-	# Buscar en res://musica/ y en res://assets/musica/
+	# Buscar en res://musica/
 	var search_paths = ["res://musica/", "res://assets/musica/"]
 	
 	for path in search_paths:

@@ -17,7 +17,6 @@ extends Control
 @onready var clear_one_button: Button = %ClearOneButton
 @onready var clear_all_button: Button = %ClearAllButton
 @onready var restart_button: Button = %RestartButton
-@onready var debug_button: Button = %DebugButton
 @onready var operators_container: HBoxContainer = %OperatorsContainer
 @onready var game_over_panel: PanelContainer = %GameOverPanel
 @onready var winner_label: Label = %WinnerLabel
@@ -29,12 +28,17 @@ var dice_buttons: Array[Button] = []
 var evaluated_target_value: int = -1
 var game_is_over: bool = false
 
-# Colores característicos
-const COLOR_P1 = Color("#00e5ff") # Cyan Neón
+# Buffer para el código secreto ("siempre hay gdv")
+var secret_buffer: String = ""
+const SECRET_CODE: String = "siempre hay gdv"
+
+# Colores característicos de alto contraste
+const COLOR_P1 = Color("#00e5ff") # Cyan Neón / Azul
 const COLOR_P2 = Color("#ff9100") # Naranja Neón
-const COLOR_NEUTRAL = Color("#ffffff")
-const COLOR_VALID = Color("#00ff66")
-const COLOR_ERROR = Color("#ff3366")
+const COLOR_NEUTRAL = Color("#ffffff") # Blanco puro
+const COLOR_VALID = Color("#00ff66") # Verde neón brillante
+const COLOR_WARN = Color("#ffcc00") # Amarillo neón
+const COLOR_ERROR = Color("#ff3366") # Rojo neón
 
 func _ready() -> void:
 	board_manager.board_updated.connect(_on_board_updated)
@@ -46,11 +50,24 @@ func _ready() -> void:
 	clear_all_button.pressed.connect(_on_clear_all_pressed)
 	confirm_button.pressed.connect(_on_confirm_button_pressed)
 	restart_button.pressed.connect(_on_restart_button_pressed)
-	debug_button.pressed.connect(func(): get_tree().change_scene_to_file("res://scenes/debug_mode.tscn"))
 	$CanvasLayer/GameOverPanel/VBoxContainer/PlayAgainButton.pressed.connect(_on_restart_button_pressed)
 
 	_setup_operator_buttons()
 	start_new_game()
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and not event.echo:
+		var unicode = event.unicode
+		if unicode > 0:
+			var char_typed = String.chr(unicode).to_lower()
+			secret_buffer += char_typed
+			if secret_buffer.length() > 30:
+				secret_buffer = secret_buffer.right(30)
+			
+			if secret_buffer.ends_with(SECRET_CODE):
+				secret_buffer = ""
+				print("[CheatCode] ¡Código secreto detectado! Abriendo Modo Debug...")
+				get_tree().change_scene_to_file("res://scenes/debug_mode.tscn")
 
 func start_new_game() -> void:
 	game_is_over = false
@@ -73,8 +90,22 @@ func _setup_operator_buttons() -> void:
 	for op in ops:
 		var btn = Button.new()
 		btn.text = " " + op + " "
-		btn.custom_minimum_size = Vector2(45, 45)
-		btn.theme_type_variation = "FlatButton"
+		btn.custom_minimum_size = Vector2(48, 48)
+		btn.add_theme_font_size_override("font_size", 18)
+		btn.add_theme_color_override("font_color", Color("#00e5ff"))
+		
+		var op_style = StyleBoxFlat.new()
+		op_style.set_corner_radius_all(6)
+		op_style.bg_color = Color("#141b2d")
+		op_style.set_border_width_all(2)
+		op_style.border_color = Color("#294268")
+		btn.add_theme_stylebox_override("normal", op_style)
+		
+		var op_hover = op_style.duplicate()
+		op_hover.bg_color = Color("#1e2c4a")
+		op_hover.border_color = Color("#00e5ff")
+		btn.add_theme_stylebox_override("hover", op_hover)
+		
 		var op_text = op
 		btn.pressed.connect(func(): _append_operator(op_text))
 		operators_container.add_child(btn)
@@ -111,8 +142,23 @@ func _on_dice_rolled(values: Array) -> void:
 	
 	for i in range(values.size()):
 		var btn = Button.new()
-		btn.text = "🎲 %d" % values[i]
-		btn.custom_minimum_size = Vector2(70, 50)
+		btn.text = str(values[i]) 
+		btn.custom_minimum_size = Vector2(56, 46)
+		btn.add_theme_font_size_override("font_size", 20)
+		btn.add_theme_color_override("font_color", COLOR_NEUTRAL)
+		
+		var die_style = StyleBoxFlat.new()
+		die_style.set_corner_radius_all(8)
+		die_style.bg_color = Color("#1c2438")
+		die_style.set_border_width_all(2)
+		die_style.border_color = Color("#3d527a")
+		btn.add_theme_stylebox_override("normal", die_style)
+		
+		var die_hover = die_style.duplicate()
+		die_hover.bg_color = Color("#263452")
+		die_hover.border_color = Color("#00e5ff")
+		btn.add_theme_stylebox_override("hover", die_hover)
+		
 		var die_index = i
 		var die_val = values[i]
 		btn.pressed.connect(func(): _on_die_pressed(die_index, die_val))
@@ -153,7 +199,15 @@ func _on_clear_all_pressed() -> void:
 func _update_dice_buttons_state() -> void:
 	for i in range(dice_buttons.size()):
 		if i < dice_buttons.size():
-			dice_buttons[i].disabled = (i in dice_manager.used_dice_indices)
+			var is_used = (i in dice_manager.used_dice_indices)
+			dice_buttons[i].disabled = is_used
+			if is_used:
+				var disabled_style = StyleBoxFlat.new()
+				disabled_style.set_corner_radius_all(8)
+				disabled_style.bg_color = Color("#0e131d")
+				disabled_style.set_border_width_all(1)
+				disabled_style.border_color = Color("#1e283a")
+				dice_buttons[i].add_theme_stylebox_override("disabled", disabled_style)
 
 func _rebuild_and_evaluate_formula() -> void:
 	var expr_str = ""
@@ -177,18 +231,27 @@ func _rebuild_and_evaluate_formula() -> void:
 	if eval_res["valid"]:
 		var val: int = eval_res["result"]
 		evaluated_target_value = val
-		result_label.text = "Resultado: %d ✓" % val
-		result_label.add_theme_color_override("font_color", COLOR_VALID)
 		
-		var pos = board_manager.find_available_cell_pos(val)
-		if pos != Vector2i(-1, -1):
-			confirm_button.disabled = false
-			status_label.text = "¡Resultado %d VÁLIDO y LIBRE! Presiona 'Confirmar'." % val
-			_highlight_target_board_cell(val)
-		else:
+		if val > 50:
+			result_label.text = "Resultado: %d ⚠️ (Mayor a 50)" % val
+			result_label.add_theme_color_override("font_color", COLOR_WARN)
 			confirm_button.disabled = true
-			status_label.text = "El número %d NO está libre o está fuera de rango (1-50)." % val
+			status_label.text = "💡 ¡Tremenda cuenta! (%d), pero el tablero llega hasta 50. Usá '⌫ Borrar 1' para probar otra opción." % val
 			_highlight_target_board_cell(-1)
+		else:
+			var pos = board_manager.find_available_cell_pos(val)
+			if pos != Vector2i(-1, -1):
+				result_label.text = "Resultado: %d ✓" % val
+				result_label.add_theme_color_override("font_color", COLOR_VALID)
+				confirm_button.disabled = false
+				status_label.text = "¡Resultado %d VÁLIDO y LIBRE! Presioná 'Confirmar'." % val
+				_highlight_target_board_cell(val)
+			else:
+				result_label.text = "Resultado: %d ⚠️ (Ocupado)" % val
+				result_label.add_theme_color_override("font_color", COLOR_WARN)
+				confirm_button.disabled = true
+				status_label.text = "El casillero %d ya fue ocupado. Usá '⌫ Borrar 1' para buscar otra opción libre." % val
+				_highlight_target_board_cell(-1)
 	else:
 		evaluated_target_value = -1
 		result_label.text = "Resultado: " + eval_res["error"]
@@ -197,7 +260,7 @@ func _rebuild_and_evaluate_formula() -> void:
 		_highlight_target_board_cell(-1)
 
 func _on_confirm_button_pressed() -> void:
-	if evaluated_target_value <= 0 or game_is_over: return
+	if evaluated_target_value <= 0 or evaluated_target_value > 50 or game_is_over: return
 	
 	var pos = board_manager.find_available_cell_pos(evaluated_target_value)
 	if pos != Vector2i(-1, -1):
@@ -223,7 +286,7 @@ func _on_board_updated() -> void:
 		for c in range(BoardManager.GRID_COLS):
 			var cell_data = board_manager.grid[r][c]
 			var btn = Button.new()
-			btn.custom_minimum_size = Vector2(55, 42)
+			btn.custom_minimum_size = Vector2(58, 44)
 			btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			btn.size_flags_vertical = Control.SIZE_EXPAND_FILL
 			
@@ -231,29 +294,29 @@ func _on_board_updated() -> void:
 			var owner_id: int = cell_data["owner"]
 			
 			var style = StyleBoxFlat.new()
-			style.set_corner_radius_all(4)
+			style.set_corner_radius_all(6)
 
 			if owner_id == 1:
 				btn.text = "%d  X" % val
 				btn.add_theme_color_override("font_color", COLOR_P1)
-				btn.add_theme_font_size_override("font_size", 16)
-				style.bg_color = Color("#003344")
+				btn.add_theme_font_size_override("font_size", 17)
+				style.bg_color = Color("#0b324d")
 				style.set_border_width_all(2)
 				style.border_color = COLOR_P1
 			elif owner_id == 2:
 				btn.text = "%d  O" % val
 				btn.add_theme_color_override("font_color", COLOR_P2)
-				btn.add_theme_font_size_override("font_size", 16)
-				style.bg_color = Color("#442200")
+				btn.add_theme_font_size_override("font_size", 17)
+				style.bg_color = Color("#4d240b")
 				style.set_border_width_all(2)
 				style.border_color = COLOR_P2
 			else:
 				btn.text = str(val)
 				btn.add_theme_color_override("font_color", COLOR_NEUTRAL)
-				btn.add_theme_font_size_override("font_size", 14)
-				style.bg_color = Color("#1e222d")
-				style.set_border_width_all(1)
-				style.border_color = Color("#343a4a")
+				btn.add_theme_font_size_override("font_size", 16)
+				style.bg_color = Color("#182030")
+				style.set_border_width_all(2)
+				style.border_color = Color("#3e5278")
 				
 			btn.add_theme_stylebox_override("normal", style)
 			btn.add_theme_stylebox_override("disabled", style)
@@ -271,29 +334,29 @@ func _highlight_target_board_cell(target_val: int) -> void:
 				if target_val > 0 and cell_data["value"] == target_val and cell_data["owner"] == 0:
 					btn.add_theme_color_override("font_color", COLOR_VALID)
 					var highlight_style = StyleBoxFlat.new()
-					highlight_style.set_corner_radius_all(4)
-					highlight_style.bg_color = Color("#004422")
-					highlight_style.set_border_width_all(2)
+					highlight_style.set_corner_radius_all(6)
+					highlight_style.bg_color = Color("#0a4a22")
+					highlight_style.set_border_width_all(3)
 					highlight_style.border_color = COLOR_VALID
 					btn.add_theme_stylebox_override("disabled", highlight_style)
 				else:
 					var normal_style = StyleBoxFlat.new()
-					normal_style.set_corner_radius_all(4)
+					normal_style.set_corner_radius_all(6)
 					if cell_data["owner"] == 1:
 						btn.add_theme_color_override("font_color", COLOR_P1)
-						normal_style.bg_color = Color("#003344")
+						normal_style.bg_color = Color("#0b324d")
 						normal_style.set_border_width_all(2)
 						normal_style.border_color = COLOR_P1
 					elif cell_data["owner"] == 2:
 						btn.add_theme_color_override("font_color", COLOR_P2)
-						normal_style.bg_color = Color("#442200")
+						normal_style.bg_color = Color("#44240b")
 						normal_style.set_border_width_all(2)
 						normal_style.border_color = COLOR_P2
 					else:
 						btn.add_theme_color_override("font_color", COLOR_NEUTRAL)
-						normal_style.bg_color = Color("#1e222d")
-						normal_style.set_border_width_all(1)
-						normal_style.border_color = Color("#343a4a")
+						normal_style.bg_color = Color("#182030")
+						normal_style.set_border_width_all(2)
+						normal_style.border_color = Color("#3e5278")
 					btn.add_theme_stylebox_override("disabled", normal_style)
 			index += 1
 
